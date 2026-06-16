@@ -31,4 +31,9 @@ suite("regex for matching", () => {
 		assert.equal(decorate("const version2API = 1"), "const version2~API = 1")
 		assert.equal(decorate("const ApiV2Endpoint = 1"), "const Api~V2~Endpoint = 1")
 	})
+
+	test("should skip \\u200A or #aBc", () => {
+		assert.equal(decorate("\\u200A"), " \\u200A")
+		assert.equal(decorate("$color: #aBc"), "$color: #aBc")
+	})
 })

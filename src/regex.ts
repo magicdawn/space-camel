@@ -1,3 +1,17 @@
+const raw = String.raw
+
+const letter = raw`\p{Letter}`
+const lower = raw`\p{Lowercase_Letter}`
+const upper = raw`\p{Uppercase_Letter}`
+
+const identifier = raw`[${letter}\d]`
+const lowerIdentifier = raw`[${lower}\d]`
+
+const skipPrefix = raw`(?<!(?:\\u|#)${identifier}*)`
+const lU = raw`(?<=\b${identifier}*${lowerIdentifier})${upper}`
+const UUl = raw`(?<=\b${identifier}*${upper})${upper}${lower}`
+const suffixGuard = raw`(?=${identifier}*\b)`
+
 /**
  * I'm a regular expression to match capital letters, provided zhey are placed after any letter.
  *
@@ -7,4 +21,4 @@
  *	2. UUper
  *			^^
  */
-export const regularExpression = /(?:(?<=\b[a-zA-Z0-9]*[a-z0-9])[A-Z](?=[a-zA-Z0-9]*\b))|(?:(?<=\b[a-zA-Z0-9]*[A-Z])[A-Z][a-z](?=[a-zA-Z0-9]*\b))/g
+export const regularExpression = new RegExp(raw`${skipPrefix}(?:${lU}|${UUl})${suffixGuard}`, "gv")
