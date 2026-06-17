@@ -33,7 +33,11 @@ suite("regex for matching", () => {
 	})
 
 	test("should skip \\u200A or #aBc", () => {
-		assert.equal(decorate("\\u200A"), " \\u200A")
+		assert.equal(decorate("\\u200A"), "\\u200A")
 		assert.equal(decorate("$color: #aBc"), "$color: #aBc")
+	})
+	test("should skip 1080P or 4K", () => {
+		assert.equal(decorate("1080P"), "1080P")
+		assert.equal(decorate("4K"), "4K")
 	})
 })
