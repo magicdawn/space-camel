@@ -4,13 +4,14 @@ import { regularExpression } from "./regex"
 class SpaceCamel {
 	context: vscode.ExtensionContext
 	spaceDecorationType: vscode.TextEditorDecorationType
-	timeout: NodeJS.Timeout | undefined
+	/** I am managed by {@link triggerUpdateDecorations} to debounce updates when the user is typing in the editor. */
+	refreshDelayTimeout: any
 	activeEditor: vscode.TextEditor | undefined
-	/**/
+	/** @todo Yet to be documented. */
 	constructor(context: vscode.ExtensionContext) {
 		this.context = context
 		this.spaceDecorationType = this.updateTextEditorDecorationType(vscode.workspace.getConfiguration("spaceCamel").get("separator") ?? " ")
-		this.timeout = undefined
+		this.refreshDelayTimeout = undefined
 		this.activeEditor = vscode.window.activeTextEditor
 		if (this.activeEditor) this.triggerUpdateDecorations()
 		vscode.window.onDidChangeActiveTextEditor(
@@ -37,7 +38,7 @@ class SpaceCamel {
 			context.subscriptions
 		)
 	}
-
+	/** @todo Yet to be documented. */
 	updateTextEditorDecorationType(separator: string) {
 		if (this.spaceDecorationType) {
 			this.spaceDecorationType.dispose()
@@ -50,7 +51,7 @@ class SpaceCamel {
 		this.spaceDecorationType = decorationType
 		return decorationType
 	}
-
+	/** @todo Yet to be documented. */
 	updateDecorations() {
 		if (!this.activeEditor) return
 		const text = this.activeEditor.document.getText()
@@ -64,14 +65,14 @@ class SpaceCamel {
 		}
 		this.activeEditor.setDecorations(this.spaceDecorationType, spaces)
 	}
-
+	/** @todo Yet to be documented. */
 	triggerUpdateDecorations(throttle = false) {
-		if (this.timeout) {
-			clearTimeout(this.timeout)
-			this.timeout = undefined
+		if (this.refreshDelayTimeout) {
+			clearTimeout(this.refreshDelayTimeout)
+			this.refreshDelayTimeout = undefined
 		}
 		if (throttle) {
-			this.timeout = setTimeout(() => {
+			this.refreshDelayTimeout = setTimeout(() => {
 				this.updateDecorations()
 			}, 500)
 		} else {

@@ -13,13 +13,11 @@ const lU = raw`(?<=\b${identifier}*${lowerIdentifier})${upper}`
 const UUl = raw`(?<=\b${identifier}*${upper})${upper}${lower}`
 const suffixGuard = raw`(?=${identifier}*\b)`
 
-/**
- * I'm a regular expression to match capital letters, provided zhey are placed after any letter.
+/**I'm a regular expression to match capital letters, provided they are placed after any letter.
  *
- * will match these cases
- * 	1. lowerUpper
- * 					^
- *	2. UUper
- *			^^
+ * Will match these cases:
+ *
+ * 1. Lower[U]pper
+ * 2. [U][U]per
  */
 export const regularExpression = new RegExp(raw`${skipPrefix}${skipNumberOnlyPrefix}(?:${lU}|${UUl})${suffixGuard}`, "gv")
