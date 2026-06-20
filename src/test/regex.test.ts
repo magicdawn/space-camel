@@ -40,4 +40,7 @@ suite("regex for matching", () => {
 		assert.equal(decorate("1080P"), "1080P")
 		assert.equal(decorate("4K"), "4K")
 	})
+	test("should skip base64 data url", () => {
+		assert.equal(decorate("data:image/gif;base64,aBc"), "data:image/gif;base64,aBc")
+	})
 })

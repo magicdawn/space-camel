@@ -9,6 +9,7 @@ const lowerIdentifier = raw`[${lower}\d]`
 
 const skipPrefix = raw`(?<!(?:\\u|#)${identifier}*)`
 const skipNumberOnlyPrefix = raw`(?<!\b\d+)`
+const skipBase64Prefix = raw`(?<!data:${letter}+\/${letter}+;base64,[a-zA-Z0-9+\/=]+)` // data:image/gif;base64,
 const lU = raw`(?<=\b${identifier}*${lowerIdentifier})${upper}`
 const UUl = raw`(?<=\b${identifier}*${upper})${upper}${lower}`
 const suffixGuard = raw`(?=${identifier}*\b)`
@@ -20,4 +21,4 @@ const suffixGuard = raw`(?=${identifier}*\b)`
  * 1. Lower[U]pper
  * 2. [U][U]per
  */
-export const regularExpression = new RegExp(raw`${skipPrefix}${skipNumberOnlyPrefix}(?:${lU}|${UUl})${suffixGuard}`, "gv")
+export const regularExpression = new RegExp(raw`${skipPrefix}${skipNumberOnlyPrefix}${skipBase64Prefix}(?:${lU}|${UUl})${suffixGuard}`, "gv")
