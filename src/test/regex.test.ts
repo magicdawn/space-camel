@@ -32,14 +32,21 @@ suite("regex for matching", () => {
 		assert.equal(decorate("const ApiV2Endpoint = 1"), "const Api~V2~Endpoint = 1")
 	})
 
-	test("should skip \\u200A or #aBc", () => {
+	test("should skip unicode prefix: \\u200A", () => {
+		assert.equal(decorate("u200A"), "u200~A")
 		assert.equal(decorate("\\u200A"), "\\u200A")
-		assert.equal(decorate("$color: #aBc"), "$color: #aBc")
 	})
+
+	test("should skip color hash prefix: #aBc", () => {
+		assert.equal(decorate("aBc"), "a~Bc")
+		assert.equal(decorate("#aBc"), "#aBc")
+	})
+
 	test("should skip 1080P or 4K", () => {
 		assert.equal(decorate("1080P"), "1080P")
 		assert.equal(decorate("4K"), "4K")
 	})
+
 	test("should skip base64 data url", () => {
 		assert.equal(decorate("aBc"), "a~Bc")
 		assert.equal(decorate("data:image/gif;base64,aBc"), "data:image/gif;base64,aBc")
